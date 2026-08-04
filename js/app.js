@@ -8,33 +8,38 @@ class CodeQuestApp {
     constructor() {
         this.rpg = new RPGSystem();
         this.tutor = new AITutor();
-        this.currentLesson = pythonLessons[0];
+        this.lessons = pythonLessons;
+        this.currentLesson = null;
         this.hintIndex = 0;
         
-        // Inisialisasi Code Editor sebagai komponen terpisah
         this.codeEditor = new CodeEditor('editor-container', 'python', 'vs-dark');
-        
         this.phaserGame = null;
     }
 
-    async init() {
-        this.rpg.updateUI();
+    async init(language = 'python') {
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('map-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
         
-        // Muat editor secara asynchronous
-        await this.codeEditor.load();
-        this.codeEditor.setValue(this.currentLesson.starterCode);
+        this.rpg.updateUI();
+        this.currentLesson = this.lessons[0];
+        
+        if (!this.codeEditor.isReady) {
+            await this.codeEditor.load();
+        }
         
         this.initPhaserGame();
         this.setupEventListeners();
         this.renderLesson();
+        this.switchPage('theory'); // Selalu mulai dari halaman teori
     }
 
     initPhaserGame() {
+        if (this.phaserGame) return;
         const config = {
             type: Phaser.AUTO,
             parent: 'game-container',
-            width: '100%',
-            height: '100%',
+            width: '100%', height: '100%',
             scale: { mode: Phaser.Scale.RESIZE },
             physics: { default: 'arcade', arcade: { gravity: { y: 0 }, debug: false } },
             scene: [CodeGateScene]
@@ -44,30 +49,37 @@ class CodeQuestApp {
 
     renderLesson() {
         document.getElementById('lesson-title').innerText = this.currentLesson.title;
+        document.getElementById('lesson-theory').innerText = this.currentLesson.theory;
         document.getElementById('lesson-description').innerText = this.currentLesson.story;
-        
-        // Gunakan method dari komponen CodeEditor
         this.codeEditor.setValue(this.currentLesson.starterCode);
     }
 
+    // Fungsi untuk berpindah halaman
+    switchPage(pageName) {
+        document.getElementById('page-theory').classList.toggle('active', pageName === 'theory');
+        document.getElementById('page-practice').classList.toggle('active', pageName === 'practice');
+    }
+
     setupEventListeners() {
+        // Navigasi Halaman
+        document.getElementById('goto-practice-btn').addEventListener('click', () => this.switchPage('practice'));
+        document.getElementById('goto-theory-btn').addEventListener('click', () => this.switchPage('theory'));
+        
+        // Run dan Hint
         document.getElementById('run-code').addEventListener('click', () => this.runCode());
         document.getElementById('hint-btn').addEventListener('click', () => this.showHint());
     }
 
     runCode() {
-        // Ambil kode dari komponen CodeEditor
         const code = this.codeEditor.getValue();
         let output = '';
         
-        // Simulasi eksekusi kode (Regex sederhana untuk demo GitHub Pages)
         const printMatch = code.match(/print\(["'](.*)["']\)/);
         if (printMatch) output = printMatch[1];
         
         const varMatch = code.match(/=\s*["'](.*)["']/);
         if (varMatch && !printMatch) output = varMatch[1];
 
-        // Evaluasi oleh AI Tutor
         const result = this.tutor.evaluate(code, this.currentLesson.expectedOutput, output, 'python');
         
         const tutorBox = document.getElementById('ai-tutor');
@@ -77,16 +89,15 @@ class CodeQuestApp {
         if (result.status === 'success') {
             this.rpg.addXP(50);
             this.rpg.addGold(10);
-            
-            // Buka gerbang di game Phaser
             const activeScene = this.phaserGame.scene.scenes[0];
-            activeScene.unlockGate();
+            if (activeScene && activeScene.unlockGate) activeScene.unlockGate();
             
-            // Lanjut ke level berikutnya
             setTimeout(() => {
-                if (pythonLessons[this.currentLesson.id]) {
-                    this.currentLesson = pythonLessons[this.currentLesson.id];
+                if (this.lessons[this.currentLesson.id]) {
+                    this.currentLesson = this.lessons[this.currentLesson.id];
                     this.renderLesson();
+                    this.switchPage('theory'); // Kembali ke teori untuk level selanjutnya
+                    if (activeScene && activeScene.scene) activeScene.scene.restart();
                 }
             }, 3000);
         }
@@ -102,16 +113,23 @@ class CodeQuestApp {
     }
 }
 
-// Inisialisasi Aplikasi
 const app = new CodeQuestApp();
 
-// Register Service Worker
+// Navigasi Awal
+document.getElementById('start-game-btn').addEventListener('click', () => {
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('map-screen').style.display = 'flex';
+});
+
+document.querySelectorAll('.kingdom-card').forEach(card => {
+    card.addEventListener('click', () => {
+        if (!card.classList.contains('locked')) {
+            app.init(card.dataset.lang);
+        }
+    });
+});
+
+// Service Worker
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js');
 }
-
-// Tunggu tombol Start diklik
-document.getElementById('start-game-btn').addEventListener('click', async () => {
-    document.getElementById('welcome-screen').style.display = 'none'; // Sembunyikan layar pembuka
-    await app.init(); // Baru mulai game dan editornya
-});
