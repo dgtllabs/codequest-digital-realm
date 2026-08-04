@@ -22,7 +22,7 @@ const LANGUAGES = [
     { id: 'lua', name: 'Lua Sanctuary', icon: '🌙', desc: 'Bahasa scripting ringan untuk game.', locked: true }
 ];
 
-// Data Pelajaran (Kombinasi instruksi ID + Kode/Output EN)
+// Data Pelajaran
 const LESSONS = [
     {
         id: 0,
@@ -31,12 +31,7 @@ const LESSONS = [
         story: "🎯 Misi:\nLengkapi kode di editor agar menghasilkan output persis seperti ini:\n\nHello World",
         expectedOutput: "Hello World",
         starterCode: "print(\"____\")",
-        hints: [
-            "Hapus garis bawah (____) di dalam tanda kutip.", 
-            "Ganti dengan teks Hello World.", 
-            "Pastikan ejaan dan huruf besarnya tepat.", 
-            "Jawaban: print(\"Hello World\")"
-        ]
+        hints: ["Hapus garis bawah (____) di dalam tanda kutip.", "Ganti dengan teks Hello World.", "Pastikan ejaan dan huruf besarnya tepat.", "Jawaban: print(\"Hello World\")"]
     },
     {
         id: 1,
@@ -45,26 +40,7 @@ const LESSONS = [
         story: "🎯 Misi:\nBuat variabel bernama `name` dan isi dengan nama 'Code Master'. Lalu tampilkan variabel tersebut ke layar agar outputnya:\n\nCode Master",
         expectedOutput: "Code Master",
         starterCode: "# Ketik kodemu di bawah ini\n",
-        hints: [
-            "Buat variabel dengan format: name = \"...\"", 
-            "Isi dengan Code Master di dalam tanda kutip.", 
-            "Jangan lupa gunakan print(name) di baris kedua.", 
-            "Jawaban:\nname = \"Code Master\"\nprint(name)"
-        ]
-    },
-    {
-        id: 2,
-        title: "Level 3: Basic Math (Operasi Matematika)",
-        theory: "Komputer adalah kalkulator super canggih. Kamu bisa langsung meminta Python menghitung angka tanpa tanda kutip.\n\nContoh: `print(10 + 5)` akan menghasilkan `15`. Tanda tambah (+) disebut operator.",
-        story: "🎯 Misi:\nGunakan operator penjumlahan (+) di dalam fungsi print() agar komputer menghasilkan output:\n\n42",
-        expectedOutput: "42",
-        starterCode: "print(20 + __)",
-        hints: [
-            "Ganti garis bawah dengan angka.", 
-            "Hasilnya harus 42. Jika 20 + x = 42, berarti x adalah...", 
-            "22", 
-            "Jawaban: print(20 + 22)"
-        ]
+        hints: ["Buat variabel dengan format: name = \"...\"", "Isi dengan Code Master di dalam tanda kutip.", "Jangan lupa gunakan print(name) di baris kedua.", "Jawaban:\nname = \"Code Master\"\nprint(name)"]
     }
 ];
 
@@ -82,7 +58,6 @@ class CodeQuestApp {
         this.switchScreen('app-screen');
         this.rpg.updateUI();
         
-        // SIMPAN PROGRESS: Ingat bahasa apa yang sedang dipelajari
         localStorage.setItem('codequest_current_lang', language);
         
         if (!this.codeEditor.isReady) {
@@ -90,33 +65,26 @@ class CodeQuestApp {
         }
         
         this.initPhaserGame();
-        if (this.phaserGame && this.phaserGame.scene.scenes[0]) {
-            this.phaserGame.scene.scenes[0].scene.start();
-        }
         
-        this.setupAppListeners();
-        
-        // MUAT PROGRESS: Cek apakah ada level yang tersimpan sebelumnya
         const savedLessonId = parseInt(localStorage.getItem('codequest_current_lesson') || '0');
-        if (LESSONS[savedLessonId]) {
-            this.currentLesson = LESSONS[savedLessonId];
-        } else {
-            this.currentLesson = LESSONS[0];
-        }
-        
-        // Cek apakah pemain terakhir berada di halaman Teori atau Praktik
+        this.currentLesson = LESSONS[savedLessonId] || LESSONS[0];
         const savedPage = localStorage.getItem('codequest_current_page') || 'theory';
         
         this.renderLesson();
-        this.switchPage(savedPage); // Kembali ke halaman terakhir yang dibuka
+        this.switchPage(savedPage);
     }
 
     initPhaserGame() {
         if (this.phaserGame) return;
         const config = {
-            type: Phaser.AUTO, parent: 'game-container',
-            width: '100%', height: '100%',
-            scale: { mode: Phaser.Scale.RESIZE },
+            type: Phaser.AUTO,
+            parent: 'game-container',
+            width: '100%', 
+            height: '100%',
+            scale: { 
+                mode: Phaser.Scale.FIT, // UBAH KE FIT AGAR TIDAK MELEBAR
+                autoCenter: Phaser.Scale.CENTER_BOTH 
+            },
             physics: { default: 'arcade', arcade: { gravity: { y: 0 } } },
             scene: [CodeGateScene]
         };
@@ -133,8 +101,6 @@ class CodeQuestApp {
     switchPage(pageName) {
         document.getElementById('page-theory').classList.toggle('active', pageName === 'theory');
         document.getElementById('page-practice').classList.toggle('active', pageName === 'practice');
-        
-        // SIMPAN PROGRESS: Ingat apakah pemain sedang di Teori atau Praktik
         localStorage.setItem('codequest_current_page', pageName);
     }
 
@@ -142,9 +108,13 @@ class CodeQuestApp {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
         
-        // Trik browser agar tombol back fisik berfungsi
+        const backBtn = document.getElementById('back-btn');
+        if(backBtn) backBtn.style.display = (screenId === 'app-screen') ? 'block' : 'none';
+        
         if (pushHistory) {
-            history.pushState({ screen: screenId }, "", `#${screenId}`);
+            try {
+                history.pushState({ screen: screenId }, "", `#${screenId}`);
+            } catch (e) {}
         }
     }
 
@@ -154,12 +124,11 @@ class CodeQuestApp {
         document.getElementById('run-code').onclick = () => this.runCode();
         document.getElementById('hint-btn').onclick = () => this.showHint();
         
-        // TAMBAHKAN INI: Fungsi kembali ke peta
-        document.getElementById('back-to-map-btn').onclick = () => {
+        document.getElementById('back-btn').onclick = () => {
             this.switchScreen('map-screen');
-            // Hentikan game Phaser sementara agar tidak boros memori
             if (this.phaserGame) {
-                this.phaserGame.scene.scenes[0].scene.stop();
+                const scene = this.phaserGame.scene.scenes[0];
+                if (scene && scene.scene.isActive()) scene.scene.stop();
             }
         };
     }
@@ -169,6 +138,7 @@ class CodeQuestApp {
         let output = '';
         const printMatch = code.match(/print\(["'](.*)["']\)/);
         if (printMatch) output = printMatch[1];
+        
         const varMatch = code.match(/=\s*["'](.*)["']/);
         if (varMatch && !printMatch) output = varMatch[1];
 
@@ -181,24 +151,25 @@ class CodeQuestApp {
             this.rpg.addXP(50);
             this.rpg.addGold(10);
             const activeScene = this.phaserGame.scene.scenes[0];
-            if (activeScene) activeScene.unlockGate();
+            if (activeScene && activeScene.unlockGate) activeScene.unlockGate();
             
-            // SIMPAN PROGRESS: Ingat level yang baru saja diselesaikan
             localStorage.setItem('codequest_current_lesson', this.currentLesson.id);
             
             setTimeout(() => {
                 if (LESSONS[this.currentLesson.id + 1]) {
                     this.currentLesson = LESSONS[this.currentLesson.id + 1];
-                    
-                    // Simpan level baru yang akan dimainkan
                     localStorage.setItem('codequest_current_lesson', this.currentLesson.id);
-                    
                     this.renderLesson();
-                    this.switchPage('theory'); // Kembali ke teori untuk level berikutnya
-                    if (activeScene) activeScene.scene.restart();
+                    this.switchPage('theory');
+                    // Hentikan dan mulai ulang scene dengan aman
+                    if (activeScene) {
+                        activeScene.scene.stop();
+                        activeScene.scene.start();
+                    }
                 }
             }, 3000);
         }
+    }
 
     showHint() {
         if (this.hintIndex < this.currentLesson.hints.length) {
@@ -210,26 +181,21 @@ class CodeQuestApp {
     }
 }
 
-// --- GLOBAL EVENT LISTENERS (Dijalankan saat halaman dimuat) ---
+// --- GLOBAL EVENT LISTENERS ---
 document.addEventListener('DOMContentLoaded', () => {
     const app = new CodeQuestApp();
 
-    // CEK REFRESH: Apakah pemain sebelumnya sedang bermain?
     const lastLang = localStorage.getItem('codequest_current_lang');
     if (lastLang) {
-        // Jika ya, langsung masuk ke aplikasi tanpa ke Welcome Screen
         app.init(lastLang);
     } else {
-        // Jika tidak, tampilkan Welcome Screen seperti biasa
         document.getElementById('welcome-screen').classList.add('active');
     }
 
-    // 1. Tombol Masuk Dunia Digital
     document.getElementById('start-game-btn').addEventListener('click', () => {
         app.switchScreen('map-screen');
     });
 
-    // 2. Render 15 Bahasa Pemrograman
     const grid = document.getElementById('kingdom-grid');
     LANGUAGES.forEach(lang => {
         const card = document.createElement('div');
@@ -245,14 +211,12 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.appendChild(card);
     });
 
-    // 3. EVENT LISTENER UNTUK TOMBOL BACK FISIK HP/LAPTOP
     window.addEventListener('popstate', (event) => {
         if (event.state && event.state.screen) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(event.state.screen).classList.add('active');
-            
             const backBtn = document.getElementById('back-btn');
-            backBtn.style.display = (event.state.screen === 'app-screen') ? 'block' : 'none';
+            if(backBtn) backBtn.style.display = (event.state.screen === 'app-screen') ? 'block' : 'none';
 
             if (event.state.screen !== 'app-screen' && app.phaserGame) {
                 const scene = app.phaserGame.scene.scenes[0];
