@@ -64,13 +64,30 @@ main { width: 100%; flex: 1; position: relative; }
 /* PRACTICE PAGE */
 .practice-layout { display: flex; gap: 20px; height: 100%; }
 .left-panel { flex: 1; display: flex; flex-direction: column; gap: 15px; }
-#game-container { background: black; border-radius: 12px; border: 1px solid var(--glass-border); min-height: 300px; flex: 1; overflow: hidden; }
-.quest-info { padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border); }
 
-.right-panel { flex: 1; display: flex; flex-direction: column; padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--glass); }
-#editor-container { flex: 1; min-height: 250px; border-radius: 8px; overflow: hidden; border: 1px solid #333; margin-bottom: 15px; }
-.actions { display: flex; gap: 15px; margin-bottom: 15px; }
-.actions button { flex: 1; }
+/* Pastikan game container punya batas ketat */
+#game-container { 
+    background: black; 
+    border-radius: 12px; 
+    border: 1px solid var(--glass-border); 
+    min-height: 300px; 
+    max-height: 400px; /* BATAS MAKSIMAL AGAR TIDAK MELEBAR */
+    width: 100%;
+    flex: 1; 
+    overflow: hidden; 
+}
+
+/* Pastikan panel kanan juga punya batas */
+.right-panel { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    padding: 20px; 
+    border-radius: 12px; 
+    border: 1px solid var(--glass-border); 
+    background: var(--glass);
+    max-width: 50%; /* BATAS LEBAR AGAR TIDAK MENGGESER */
+}
 
 .tutor-box { padding: 15px; background: rgba(0, 243, 255, 0.05); border-left: 4px solid var(--neon-cyan); border-radius: 4px; }
 .tutor-box.error { background: rgba(255, 0, 85, 0.1); border-left-color: var(--neon-pink); }
