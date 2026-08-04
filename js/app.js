@@ -82,20 +82,33 @@ class CodeQuestApp {
         this.switchScreen('app-screen');
         this.rpg.updateUI();
         
+        // SIMPAN PROGRESS: Ingat bahasa apa yang sedang dipelajari
+        localStorage.setItem('codequest_current_lang', language);
+        
         if (!this.codeEditor.isReady) {
             await this.codeEditor.load();
         }
         
         this.initPhaserGame();
-        
-        // Jika game sudah ada, restart scenenya
         if (this.phaserGame && this.phaserGame.scene.scenes[0]) {
             this.phaserGame.scene.scenes[0].scene.start();
         }
         
         this.setupAppListeners();
+        
+        // MUAT PROGRESS: Cek apakah ada level yang tersimpan sebelumnya
+        const savedLessonId = parseInt(localStorage.getItem('codequest_current_lesson') || '0');
+        if (LESSONS[savedLessonId]) {
+            this.currentLesson = LESSONS[savedLessonId];
+        } else {
+            this.currentLesson = LESSONS[0];
+        }
+        
+        // Cek apakah pemain terakhir berada di halaman Teori atau Praktik
+        const savedPage = localStorage.getItem('codequest_current_page') || 'theory';
+        
         this.renderLesson();
-        this.switchPage('theory'); // Selalu mulai dari halaman teori
+        this.switchPage(savedPage); // Kembali ke halaman terakhir yang dibuka
     }
 
     initPhaserGame() {
@@ -120,6 +133,9 @@ class CodeQuestApp {
     switchPage(pageName) {
         document.getElementById('page-theory').classList.toggle('active', pageName === 'theory');
         document.getElementById('page-practice').classList.toggle('active', pageName === 'practice');
+        
+        // SIMPAN PROGRESS: Ingat apakah pemain sedang di Teori atau Praktik
+        localStorage.setItem('codequest_current_page', pageName);
     }
 
     switchScreen(screenId, pushHistory = true) {
