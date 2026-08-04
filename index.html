@@ -6,12 +6,20 @@
     <title>CodeQuest: The Digital Realm</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/styles.css">
-    <!-- Phaser.js untuk Game -->
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
-    <!-- Monaco Editor -->
     <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
 </head>
 <body class="theme-dark">
+    <!-- LAYAR PEMBUKA (WELCOME SCREEN) -->
+    <div id="welcome-screen" class="welcome-overlay">
+        <div class="welcome-content glassmorphism">
+            <h1>selamat datang di CodeQuest</h1>
+            <p>Dunia sedang diserang oleh virus! Satu-satunya cara untuk menyelamatkannya adalah dengan belajar kode pemrograman.</p>
+            <p>Di sini, kamu akan belajar coding seperti bermain game RPG. Baca instruksi, ikuti petunjuk AI Tutor, dan tekan tombol Run Code!</p>
+            <button id="start-game-btn" class="btn-primary">Mulai Petualangan</button>
+        </div>
+    </div>
+
     <div id="app">
         <header class="glassmorphism">
             <h1>CodeQuest</h1>
@@ -24,14 +32,14 @@
 
         <main>
             <div id="game-container" class="game-view">
-                <!-- Phaser Game akan render di sini -->
+                <!-- Phaser Game -->
             </div>
 
             <div id="lesson-panel" class="glassmorphism">
                 <h2 id="lesson-title">Welcome to Python Kingdom</h2>
                 <p id="lesson-description">Selesaikan kode untuk membuka gerbang!</p>
                 
-                <div id="editor-container" style="height: 250px; border: 1px solid #444; border-radius: 8px;"></div>
+                <div id="editor-container" style="height: 250px; border: 1px solid #444; border-radius: 8px; margin-top: 15px;"></div>
                 
                 <div class="actions">
                     <button id="run-code" class="btn-primary">Run Code</button>
@@ -39,13 +47,12 @@
                 </div>
 
                 <div id="ai-tutor" class="tutor-box">
-                    <p><b>AI Tutor:</b> Selamat datang! Tulis kode pertamamu dan tekan Run.</p>
+                    <p><b>AI Tutor:</b> Selamat datang! Baca cerita di atas, lalu tekan tombol merah 'Run Code'.</p>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
     <script type="module" src="js/app.js"></script>
 </body>
