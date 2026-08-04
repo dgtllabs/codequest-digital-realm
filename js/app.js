@@ -63,9 +63,15 @@ class CodeQuestApp {
         }
         
         this.initPhaserGame();
+        
+        // Jika game sudah ada, restart scenenya
+        if (this.phaserGame && this.phaserGame.scene.scenes[0]) {
+            this.phaserGame.scene.scenes[0].scene.start();
+        }
+        
         this.setupAppListeners();
         this.renderLesson();
-        this.switchPage('theory');
+        this.switchPage('theory'); // Selalu mulai dari halaman teori
     }
 
     initPhaserGame() {
@@ -102,6 +108,15 @@ class CodeQuestApp {
         document.getElementById('goto-theory-btn').onclick = () => this.switchPage('theory');
         document.getElementById('run-code').onclick = () => this.runCode();
         document.getElementById('hint-btn').onclick = () => this.showHint();
+        
+        // TAMBAHKAN INI: Fungsi kembali ke peta
+        document.getElementById('back-to-map-btn').onclick = () => {
+            this.switchScreen('map-screen');
+            // Hentikan game Phaser sementara agar tidak boros memori
+            if (this.phaserGame) {
+                this.phaserGame.scene.scenes[0].scene.stop();
+            }
+        };
     }
 
     runCode() {
