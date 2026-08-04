@@ -42,6 +42,11 @@ export class CodeEditor {
                     padding: { top: 10 }
                 });
                 this.isReady = true;
+                
+                // CEGAH PHASER MENCURI INPUT KEYBOARD DARI EDITOR
+                container.addEventListener('mousedown', () => window.dispatchEvent(new KeyboardEvent('keyup')));
+                container.addEventListener('keydown', (e) => e.stopPropagation());
+                
                 resolve(this.editor);
             });
         });
