@@ -98,9 +98,14 @@ class CodeQuestApp {
         document.getElementById('page-practice').classList.toggle('active', pageName === 'practice');
     }
 
-    switchScreen(screenId) {
+    switchScreen(screenId, pushHistory = true) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
+        
+        // Trik browser agar tombol back fisik berfungsi
+        if (pushHistory) {
+            history.pushState({ screen: screenId }, "", `#${screenId}`);
+        }
     }
 
     setupAppListeners() {
