@@ -70,3 +70,32 @@ main {
     #game-container { width: 60%; height: 70vh; }
     #lesson-panel { width: 40%; height: 70vh; overflow-y: auto; }
 }
+
+/* Welcome Screen */
+.welcome-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.welcome-content {
+    padding: 40px;
+    max-width: 500px;
+    border-radius: 16px;
+}
+
+.welcome-content h1 {
+    color: var(--neon);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.welcome-content p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
