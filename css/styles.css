@@ -79,4 +79,6 @@ main { width: 100%; flex: 1; position: relative; }
 @media (max-width: 900px) {
     .practice-layout { flex-direction: column; height: auto; }
     .glitch { font-size: 2.5rem; }
+
+.header-left { display: flex; align-items: center; gap: 15px; }
 }
