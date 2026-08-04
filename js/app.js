@@ -188,4 +188,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         grid.appendChild(card);
     });
+
+    // 3. EVENT LISTENER UNTUK TOMBOL BACK FISIK HP/LAPTOP
+    window.addEventListener('popstate', (event) => {
+        if (event.state && event.state.screen) {
+            // Kembalikan layar sesuai history tanpa menambah history baru
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(event.state.screen).classList.add('active');
+            
+            // Jika kembali ke peta, hentikan game Phaser agar tidak boros baterai/memori
+            if (event.state.screen !== 'app-screen' && app.phaserGame) {
+                const scene = app.phaserGame.scene.scenes[0];
+                if (scene && scene.scene.isActive()) {
+                    scene.scene.stop();
+                }
+            }
+        } else {
+            // Jika tidak ada state (kembali ke awal mula), tampilkan welcome screen
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('welcome-screen').classList.add('active');
+        }
+    });
 });
