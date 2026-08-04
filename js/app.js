@@ -22,25 +22,49 @@ const LANGUAGES = [
     { id: 'lua', name: 'Lua Sanctuary', icon: '🌙', desc: 'Bahasa scripting ringan untuk game.', locked: true }
 ];
 
-// Data Pelajaran (Hardcode untuk menghindari error CORS JSON)
+// Data Pelajaran (Kombinasi instruksi ID + Kode/Output EN)
 const LESSONS = [
     {
         id: 0,
-        title: "Level 1: Sinyal Pertama",
-        theory: "Komputer adalah mesin yang sangat pintar tapi butuh perintah yang tepat. Di Python, kita menggunakan fungsi `print()` untuk menyuruh komputer menampilkan teks di layar.\n\nAnalogi: Bayangkan `print()` adalah seorang kurir. Apa pun tulisan yang kamu berikan di dalam tanda kurung dan diapit tanda kutip (\" \"), akan disampaikannya ke layar.",
-        story: "Gerbang Python Kingdom terkunci! Untuk membukanya, kita harus mengirimkan sinyal 'Halo Dunia!' ke terminal gerbang. Kode sudah disiapkan, tinggal tekan Run Code!",
-        expectedOutput: "Halo Dunia!",
-        starterCode: "print(\"Halo Dunia!\")",
-        hints: ["Kamu tidak perlu mengetik apa-apa.", "Cukup tekan tombol Run Code.", "Pastikan kode tidak berubah.", "Kode: print(\"Halo Dunia!\")"]
+        title: "Level 1: Hello World",
+        theory: "Setiap programmer di dunia selalu memulai perjalanan mereka dengan satu magic spell (mantra) yang sama: `Hello World`.\n\nDi Python, kita menggunakan fungsi `print()` untuk menyuruh komputer menampilkan teks di layar. Teks yang ingin ditampilkan harus diapit oleh tanda kutip (\" \").\n\nContoh: `print(\"Hello\")`",
+        story: "🎯 Misi:\nLengkapi kode di editor agar menghasilkan output persis seperti ini:\n\nHello World",
+        expectedOutput: "Hello World",
+        starterCode: "print(\"____\")",
+        hints: [
+            "Hapus garis bawah (____) di dalam tanda kutip.", 
+            "Ganti dengan teks Hello World.", 
+            "Pastikan ejaan dan huruf besarnya tepat.", 
+            "Jawaban: print(\"Hello World\")"
+        ]
     },
     {
         id: 1,
-        title: "Level 2: Variabel",
-        theory: "Variabel adalah tempat untuk menyimpan data. Bayangkan variabel seperti sebuah 'KOTAK' yang diberi label nama.\n\nJika kita tulis: `nama = \"Budi\"`\nArtinya kita membuat kotak bernama `nama`, lalu memasukkan tulisan `Budi` ke dalamnya.",
-        story: "Museum Python butuh label. Buat variabel bernama `benda` dan isi dengan 'Pedang Kayu', lalu tampilkan!",
-        expectedOutput: "Pedang Kayu",
-        starterCode: "benda = \"Pedang Kayu\"\nprint(benda)",
-        hints: ["Perhatikan huruf besar/kecil.", "Gunakan tanda kutip untuk teks.", "Variabel tanpa kutip, teks dengan kutip.", "Kode: benda = \"Pedang Kayu\""]
+        title: "Level 2: Variables (Variabel)",
+        theory: "Variabel adalah tempat untuk menyimpan data, seperti sebuah 'KOTAK' yang diberi label nama.\n\nJika kita tulis: `name = \"Arthur\"`\nArtinya kita membuat kotak bernama `name`, lalu memasukkan tulisan `Arthur` ke dalamnya. Saat kita `print(name)`, komputer akan mengambil isi kotak tersebut.",
+        story: "🎯 Misi:\nBuat variabel bernama `name` dan isi dengan nama 'Code Master'. Lalu tampilkan variabel tersebut ke layar agar outputnya:\n\nCode Master",
+        expectedOutput: "Code Master",
+        starterCode: "# Ketik kodemu di bawah ini\n",
+        hints: [
+            "Buat variabel dengan format: name = \"...\"", 
+            "Isi dengan Code Master di dalam tanda kutip.", 
+            "Jangan lupa gunakan print(name) di baris kedua.", 
+            "Jawaban:\nname = \"Code Master\"\nprint(name)"
+        ]
+    },
+    {
+        id: 2,
+        title: "Level 3: Basic Math (Operasi Matematika)",
+        theory: "Komputer adalah kalkulator super canggih. Kamu bisa langsung meminta Python menghitung angka tanpa tanda kutip.\n\nContoh: `print(10 + 5)` akan menghasilkan `15`. Tanda tambah (+) disebut operator.",
+        story: "🎯 Misi:\nGunakan operator penjumlahan (+) di dalam fungsi print() agar komputer menghasilkan output:\n\n42",
+        expectedOutput: "42",
+        starterCode: "print(20 + __)",
+        hints: [
+            "Ganti garis bawah dengan angka.", 
+            "Hasilnya harus 42. Jika 20 + x = 42, berarti x adalah...", 
+            "22", 
+            "Jawaban: print(20 + 22)"
+        ]
     }
 ];
 
