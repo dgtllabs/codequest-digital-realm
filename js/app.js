@@ -104,9 +104,14 @@ class CodeQuestApp {
 
 // Inisialisasi Aplikasi
 const app = new CodeQuestApp();
-window.addEventListener('DOMContentLoaded', () => app.init());
 
-// Register Service Worker untuk PWA
+// Register Service Worker
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js');
 }
+
+// Tunggu tombol Start diklik
+document.getElementById('start-game-btn').addEventListener('click', async () => {
+    document.getElementById('welcome-screen').style.display = 'none'; // Sembunyikan layar pembuka
+    await app.init(); // Baru mulai game dan editornya
+});
