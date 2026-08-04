@@ -10,17 +10,38 @@
     <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
 </head>
 <body class="theme-dark">
-    <!-- LAYAR PEMBUKA (WELCOME SCREEN) -->
-    <div id="welcome-screen" class="welcome-overlay">
+    <!-- 1. WELCOME SCREEN -->
+    <div id="welcome-screen" class="overlay-screen">
         <div class="welcome-content glassmorphism">
-            <h1>selamat datang di CodeQuest</h1>
-            <p>Dunia sedang diserang oleh virus! Satu-satunya cara untuk menyelamatkannya adalah dengan belajar kode pemrograman.</p>
-            <p>Di sini, kamu akan belajar coding seperti bermain game RPG. Baca instruksi, ikuti petunjuk AI Tutor, dan tekan tombol Run Code!</p>
-            <button id="start-game-btn" class="btn-primary">Mulai Petualangan</button>
+            <h1>CodeQuest</h1>
+            <p>Selamat datang, Programmer Muda! Pilih kerajaan yang ingin kamu jelajahi dan mulai petualanganmu.</p>
+            <button id="start-game-btn" class="btn-primary">Masuk ke Dunia Digital</button>
         </div>
     </div>
 
-    <div id="app">
+    <!-- 2. MAP / SELECTION SCREEN -->
+    <div id="map-screen" class="overlay-screen" style="display: none;">
+        <div class="map-content">
+            <h2>Pilih Kerajaan (Bahasa)</h2>
+            <div class="kingdom-grid">
+                <div class="kingdom-card glassmorphism" data-lang="python">
+                    <h3>🐍 Python Kingdom</h3>
+                    <p>Bagus untuk pemula. Mudah dibaca seperti bahasa manusia.</p>
+                </div>
+                <div class="kingdom-card glassmorphism" data-lang="javascript">
+                    <h3>⚡ JavaScript City</h3>
+                    <p>Berbicara dengan browser. Membuat website hidup!</p>
+                </div>
+                <div class="kingdom-card glassmorphism locked">
+                    <h3>🏰 C Fortress</h3>
+                    <p>Terkunci. Selesaikan Python dulu!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. MAIN APP -->
+    <div id="app" style="display: none;">
         <header class="glassmorphism">
             <h1>CodeQuest</h1>
             <div id="rpg-stats">
@@ -31,23 +52,39 @@
         </header>
 
         <main>
-            <div id="game-container" class="game-view">
-                <!-- Phaser Game -->
+            <!-- HALAMAN TEORI -->
+            <div id="page-theory" class="page-view active">
+                <div class="theory-container glassmorphism">
+                    <span class="badge">Teori</span>
+                    <h2 id="lesson-title">Welcome</h2>
+                    <div id="lesson-theory" class="theory-box">Memuat teori...</div>
+                    <button id="goto-practice-btn" class="btn-primary">Ayo Praktekkan →</button>
+                </div>
             </div>
 
-            <div id="lesson-panel" class="glassmorphism">
-                <h2 id="lesson-title">Welcome to Python Kingdom</h2>
-                <p id="lesson-description">Selesaikan kode untuk membuka gerbang!</p>
-                
-                <div id="editor-container" style="height: 250px; border: 1px solid #444; border-radius: 8px; margin-top: 15px;"></div>
-                
-                <div class="actions">
-                    <button id="run-code" class="btn-primary">Run Code</button>
-                    <button id="hint-btn" class="btn-secondary">Hint (0/4)</button>
-                </div>
+            <!-- HALAMAN PRAKTIK -->
+            <div id="page-practice" class="page-view">
+                <div class="practice-layout">
+                    <div class="left-panel">
+                        <div id="game-container" class="game-view"></div>
+                        <div class="quest-info glassmorphism">
+                            <span class="badge">Misi</span>
+                            <p id="lesson-description">Selesaikan kode untuk membuka gerbang!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="right-panel glassmorphism">
+                        <div id="editor-container"></div>
+                        
+                        <div class="actions">
+                            <button id="run-code" class="btn-primary">Run Code</button>
+                            <button id="goto-theory-btn" class="btn-secondary">📖 Cara Menyelesaikannya</button>
+                        </div>
 
-                <div id="ai-tutor" class="tutor-box">
-                    <p><b>AI Tutor:</b> Selamat datang! Baca cerita di atas, lalu tekan tombol merah 'Run Code'.</p>
+                        <div id="ai-tutor" class="tutor-box">
+                            <p><b>AI Tutor:</b> Tulis kodemu di atas, lalu tekan Run Code.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
