@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "title": "Level 1: Hello World",
+    "story": "Kamu terjebak di gerbang Python. Satu-satunya cara membukanya adalah dengan mengirimkan sinyal 'Hello World' ke terminal gerbang.",
+    "expectedOutput": "Hello World",
+    "starterCode": "print(\"Hello World\")",
+    "hints": [
+      "Pastikan kamu menulis persis 'Hello World'.",
+      "Gunakan fungsi print().",
+      "Jangan lupa tanda kutip.",
+      "print(\"Hello World\")"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Level 2: Variable",
+    "story": "Gerbang berikutnya meminta nama panggilanmu. Simpan nama dalam variabel 'nama' dan cetak.",
+    "expectedOutput": "Hero",
+    "starterCode": "nama = \nprint(nama)",
+    "hints": [
+      "Variabel menyimpan data.",
+      "Isi variabel nama dengan string 'Hero'.",
+      "nama = \"Hero\"",
+      "Tulis: nama = \"Hero\""
+    ]
+  }
+]

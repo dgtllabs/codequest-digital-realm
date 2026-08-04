@@ -1,0 +1,72 @@
+:root {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --text-primary: #e0e0e0;
+    --accent: #0f3460;
+    --neon: #e94560;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+body.theme-dark {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.glassmorphism {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+    flex: 1;
+}
+
+#game-container {
+    width: 100%;
+    height: 300px;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#lesson-panel {
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.actions { margin-top: 15px; display: flex; gap: 10px; }
+.btn-primary { background: var(--neon); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--text-primary); padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+
+.tutor-box { margin-top: 15px; padding: 15px; background: rgba(15, 52, 96, 0.3); border-left: 4px solid var(--neon); border-radius: 4px; }
+.tutor-box.error { border-left-color: #ff4d4d; background: rgba(255, 0, 0, 0.1); }
+.tutor-box.success { border-left-color: #4dff4d; background: rgba(0, 255, 0, 0.1); }
+
+@media (min-width: 900px) {
+    main { flex-direction: row; }
+    #game-container { width: 60%; height: 70vh; }
+    #lesson-panel { width: 40%; height: 70vh; overflow-y: auto; }
+}

@@ -1,0 +1,10 @@
+// manifest.json
+{
+  "name": "CodeQuest: The Digital Realm",
+  "short_name": "CodeQuest",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#e94560",
+  "icons": []
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest: The Digital Realm</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Phaser.js untuk Game -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+    <!-- Monaco Editor -->
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+</head>
+<body class="theme-dark">
+    <div id="app">
+        <header class="glassmorphism">
+            <h1>CodeQuest</h1>
+            <div id="rpg-stats">
+                <span>Level: <b id="player-level">1</b></span>
+                <span>XP: <b id="player-xp">0</b></span>
+                <span>Gold: <b id="player-gold">0</b></span>
+            </div>
+        </header>
+
+        <main>
+            <div id="game-container" class="game-view">
+                <!-- Phaser Game akan render di sini -->
+            </div>
+
+            <div id="lesson-panel" class="glassmorphism">
+                <h2 id="lesson-title">Welcome to Python Kingdom</h2>
+                <p id="lesson-description">Selesaikan kode untuk membuka gerbang!</p>
+                
+                <div id="editor-container" style="height: 250px; border: 1px solid #444; border-radius: 8px;"></div>
+                
+                <div class="actions">
+                    <button id="run-code" class="btn-primary">Run Code</button>
+                    <button id="hint-btn" class="btn-secondary">Hint (0/4)</button>
+                </div>
+
+                <div id="ai-tutor" class="tutor-box">
+                    <p><b>AI Tutor:</b> Selamat datang! Tulis kode pertamamu dan tekan Run.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
