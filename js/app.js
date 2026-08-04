@@ -183,16 +183,22 @@ class CodeQuestApp {
             const activeScene = this.phaserGame.scene.scenes[0];
             if (activeScene) activeScene.unlockGate();
             
+            // SIMPAN PROGRESS: Ingat level yang baru saja diselesaikan
+            localStorage.setItem('codequest_current_lesson', this.currentLesson.id);
+            
             setTimeout(() => {
                 if (LESSONS[this.currentLesson.id + 1]) {
                     this.currentLesson = LESSONS[this.currentLesson.id + 1];
+                    
+                    // Simpan level baru yang akan dimainkan
+                    localStorage.setItem('codequest_current_lesson', this.currentLesson.id);
+                    
                     this.renderLesson();
-                    this.switchPage('theory');
+                    this.switchPage('theory'); // Kembali ke teori untuk level berikutnya
                     if (activeScene) activeScene.scene.restart();
                 }
             }, 3000);
         }
-    }
 
     showHint() {
         if (this.hintIndex < this.currentLesson.hints.length) {
@@ -207,6 +213,16 @@ class CodeQuestApp {
 // --- GLOBAL EVENT LISTENERS (Dijalankan saat halaman dimuat) ---
 document.addEventListener('DOMContentLoaded', () => {
     const app = new CodeQuestApp();
+
+    // CEK REFRESH: Apakah pemain sebelumnya sedang bermain?
+    const lastLang = localStorage.getItem('codequest_current_lang');
+    if (lastLang) {
+        // Jika ya, langsung masuk ke aplikasi tanpa ke Welcome Screen
+        app.init(lastLang);
+    } else {
+        // Jika tidak, tampilkan Welcome Screen seperti biasa
+        document.getElementById('welcome-screen').classList.add('active');
+    }
 
     // 1. Tombol Masuk Dunia Digital
     document.getElementById('start-game-btn').addEventListener('click', () => {
@@ -232,19 +248,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. EVENT LISTENER UNTUK TOMBOL BACK FISIK HP/LAPTOP
     window.addEventListener('popstate', (event) => {
         if (event.state && event.state.screen) {
-            // Kembalikan layar sesuai history tanpa menambah history baru
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(event.state.screen).classList.add('active');
             
-            // Jika kembali ke peta, hentikan game Phaser agar tidak boros baterai/memori
+            const backBtn = document.getElementById('back-btn');
+            backBtn.style.display = (event.state.screen === 'app-screen') ? 'block' : 'none';
+
             if (event.state.screen !== 'app-screen' && app.phaserGame) {
                 const scene = app.phaserGame.scene.scenes[0];
-                if (scene && scene.scene.isActive()) {
-                    scene.scene.stop();
-                }
+                if (scene && scene.scene.isActive()) scene.scene.stop();
             }
         } else {
-            // Jika tidak ada state (kembali ke awal mula), tampilkan welcome screen
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('welcome-screen').classList.add('active');
         }
