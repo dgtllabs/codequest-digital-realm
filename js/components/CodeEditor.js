@@ -7,24 +7,37 @@ export class CodeEditor {
         this.isReady = false;
     }
 
-    // Memuat library Monaco secara dinamis
     async load() {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
+            // Pastikan require ada
+            if (typeof require === 'undefined') {
+                console.error("Monaco Loader belum dimuat!");
+                reject("Monaco not loaded");
+                return;
+            }
+
             require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
             
             require(['vs/editor/editor.main'], () => {
-                this.editor = monaco.editor.create(document.getElementById(this.containerId), {
+                const container = document.getElementById(this.containerId);
+                if (!container) {
+                    reject("Container tidak ditemukan!");
+                    return;
+                }
+
+                this.editor = monaco.editor.create(container, {
                     value: '',
                     language: this.language,
                     theme: this.theme,
-                    automaticLayout: true, // Auto-resize
-                    minimap: { enabled: false }, // Sembunyikan minimap untuk UI yang bersih
+                    automaticLayout: true,
+                    minimap: { enabled: false },
                     fontSize: "14px",
-                    autoClosingBrackets: true, // Otomatis tutup kurung/quote
-                    autoIndent: true, // Otomatis indent
+                    autoClosingBrackets: true,
+                    autoIndent: true,
                     tabSize: 4,
                     scrollBeyondLastLine: false,
-                    lineNumbers: true, // Wajib ada
+                    lineNumbers: true,
+                    readOnly: false, // PASTIKAN INI FALSE AGAR BISA DIKETIK
                     roundedSelection: true,
                     padding: { top: 10 }
                 });
@@ -34,29 +47,13 @@ export class CodeEditor {
         });
     }
 
-    // Mengambil teks kode dari editor
     getValue() {
         return this.isReady ? this.editor.getValue() : '';
     }
 
-    // Memasukkan teks ke dalam editor
     setValue(code) {
         if (this.isReady) {
             this.editor.setValue(code);
-        }
-    }
-
-    // Mengganti bahasa pemrograman (misal dari Python ke JS)
-    setLanguage(language) {
-        if (this.isReady) {
-            monaco.editor.setModelLanguage(this.editor.getModel(), language);
-        }
-    }
-
-    // Mengganti tema (Dark/Light)
-    setTheme(theme) {
-        if (this.isReady) {
-            monaco.editor.setTheme(theme);
         }
     }
 }
